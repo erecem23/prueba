@@ -1,0 +1,30 @@
+name: tmp-cap5-n129-pdf-bundle
+
+on:
+  push:
+    branches:
+      - tmp-cap5-n129-pdf-bundle-20260922
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download and validate 16 thesis PDFs
+        run: python tools/tmp_download_cap5_16.py
+      - name: Upload thesis bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: CAP5_N113_A_N129_16_PDF
+          path: CAP5_N113_A_N129_16_PDF/
+          compression-level: 0
+          retention-days: 1
+          if-no-files-found: error
